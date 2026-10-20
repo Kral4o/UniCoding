@@ -1,4 +1,4 @@
-package lab4;
+package lab3;
 
 interface Payable{
     abstract void GetPaid(int wage);
