@@ -1,89 +1,99 @@
 package lab3;
 
-interface Payable{
-    abstract void GetPaid(int wage);
+interface Payable {
+    void getPaid(int wage);
 }
 
 abstract class Employee implements Payable{
-    public String Name;
-    int salary;
-    void GetSalary(){
-        System.out.println(this.salary);
+    protected String name;
+    protected int salary;
+
+    protected Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
     }
-    abstract void Work();
-}
 
-class Developer extends Employee{
-    public String Name;
-    int salary;
+    public String getName() {
+        return name;
+    }
 
-    @Override
-    void Work() {
-        System.out.println("I am working on this code.");
-
+    public int getSalary() {
+        return salary;
     }
 
     @Override
-    public void GetPaid(int wage) {
-        this.salary += wage;
-    }
-}
-
-class HR extends Employee{
-    String Name;
-    int salary;
-
-    @Override
-    void Work() {
-        System.out.println("I am firing people for a living.");
-
-    }
-
-    @Override
-    public void GetPaid(int wage) {
-        this.salary += wage;
-    }
-}
-
-class Office{
-    String companyName;
-    int employeeCount = 2;
-
-    void companyStats(Employee[] employees){
-        System.out.println("The" + companyName + "company has" + employeeCount + "Employees: ");
-
-        for (Employee employee : employees)
-        {
-            System.out.println(employee.Name);
-            employee.GetSalary();
+    public void getPaid(int wage) {
+        if (wage > 0) {
+            this.salary += wage;
         }
     }
 
+    abstract void work();
 }
 
-class Main{
-    public static void main(String[] args){
-        Office Asus = new Office();
-        Asus.companyName = "Asus";
+class Developer extends Employee {
+    Developer(String name, int salary) {
+        super(name, salary);
+    }
+    
+    @Override
+    void work() {
+        System.out.println(
+        name 
+        + " is working on this code.");
+    }
+}
 
-        Developer dev1 = new Developer();
-        dev1.Name = "Nikola";
-        dev1.salary = 1500;
+class HR extends Employee {
+    HR(String name, int salary) {
+        super(name, salary);
+    }
 
-        dev1.Work();
+    @Override
+    void work() {
+        System.out.println(
+        name
+        + " is working on employee"
+        + " documentation.");
+    }
+}
 
-        HR hr1 = new HR();
-        hr1.Name = "Mitko";
-        hr1.salary = 1000;
+class Office {
+    private final String companyName;
 
-        hr1.Work();
+    Office(String companyName) {
+        this.companyName = companyName;
+    }
 
-        Employee[] workers = {dev1 , hr1};
+    void printCompanyStats(Employee[] employees) {
+        System.out.println(
+        "The " + companyName + " company has "
+        + employees.length + " employees:");
 
-        Asus.companyStats(workers);
+        for(Employee employee : employees) {
+            System.out.println(
+            "- " + employee.getName() 
+            + " | Salary: " + employee.getSalary());
+        }
+    }
+}
 
+public class Main {
+    public static void main(String[] args) {
+        Office asus = new Office("Asus");
 
+        Developer dev1 = new Developer("Nikola", 1500);
+        HR hr1 = new HR("Mitko", 1000);
 
+        dev1.work();
+        hr1.work();
+
+        dev1.getPaid(500);
+        hr1.getPaid(500);
+
+        Employee[] workers = { dev1 , hr1};
+
+        asus.printCompanyStats(workers);
 
     }
 }
